@@ -1,0 +1,31 @@
+{
+    "manifest_version": 3,
+    "web_accessible_resources": [
+    {
+      "resources": ["redirect.html", "redirect2.html"],
+      "matches": ["<all_urls>"]
+    }
+  ],
+
+  "content_scripts": [
+        {
+            "matches": ["<all_urls>"],
+            "js": ["content.js"]
+        }
+    ],
+    "name": "Internet Blocker",
+    "version": "1.0",
+    "description": "Blocks distracting websites.",
+    "permissions": ["storage", "declarativeNetRequest", "scripting"],
+    "host_permissions": ["<all_urls>"],
+    "background": {
+      "service_worker": "background.js"
+    },
+    "action": {
+      "default_popup": "popup.html"
+    },
+    "icons": { "16": "images/icon16.png", "24": "images/icon24.png", "32": "images/icon32.png", "40":"images/icon40.png",
+                "48":"images/icon48.png", "128":"images/icon128.png" }
+
+  }
+  

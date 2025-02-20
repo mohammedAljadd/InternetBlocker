@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Block Websites & YouTube Channels</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        #blocked-list { list-style: none; padding: 0; }
+        #blocked-list li { margin-bottom: 10px; }
+        button { margin-left: 10px; }
+    </style>
+</head>
+<body>
+    <h3>Block this website</h3>
+    <button id="block-site">Block This Site</button>
+
+    <h3>Block YouTube Channels</h3>
+    <input type="text" id="channel-name" placeholder="Enter channel name">
+    <button id="block-channel">Block This Channel</button>
+
+    <h3>Block Adult Websites</h3>
+    <input type="text" id="adult-site-name" placeholder="Enter adult website URL">
+    <button id="block-adult-site">Block This Adult Site</button>
+    
+    <p id="message" style="font-weight: bold;"></p>
+
+
+    <h4>Blocked Sites and Channels:</h4>
+    <ul id="blocked-list"></ul>
+    
+    <p id="status"></p>
+</body>
+<script src="popup.js"></script>
+</html>
