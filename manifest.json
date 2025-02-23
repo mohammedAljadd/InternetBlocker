@@ -6,6 +6,7 @@
       "matches": ["<all_urls>"]
     }
   ],
+  
 
   "content_scripts": [
         {
@@ -16,7 +17,7 @@
     "name": "Internet Blocker",
     "version": "1.0",
     "description": "Blocks distracting websites.",
-    "permissions": ["storage", "declarativeNetRequest", "scripting"],
+    "permissions": ["storage", "declarativeNetRequest", "scripting", "tabs"],
     "host_permissions": ["<all_urls>"],
     "background": {
       "service_worker": "background.js"

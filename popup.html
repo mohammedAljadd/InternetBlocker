@@ -4,9 +4,7 @@
     <title>Block Websites & YouTube Channels</title>
     <style>
         body { font-family: Arial, sans-serif; }
-        #blocked-list { list-style: none; padding: 0; }
-        #blocked-list li { margin-bottom: 10px; }
-        button { margin-left: 10px; }
+        button { margin: 10px; padding: 10px; }
     </style>
 </head>
 <body>
@@ -20,14 +18,11 @@
     <h3>Block Adult Websites</h3>
     <input type="text" id="adult-site-name" placeholder="Enter adult website URL">
     <button id="block-adult-site">Block This Adult Site</button>
-    
+
+    <h3>Manage Blocked Websites</h3>
+    <button id="manage-blocked">Unblock Websites</button>
+
     <p id="message" style="font-weight: bold;"></p>
-
-
-    <h4>Blocked Sites and Channels:</h4>
-    <ul id="blocked-list"></ul>
-    
-    <p id="status"></p>
 </body>
 <script src="popup.js"></script>
 </html>
