@@ -20,7 +20,9 @@ function displayBlockedList() {
 
         blockedSites.forEach(site => {
             let listItem = document.createElement("li");
-            listItem.textContent = site;
+            
+            const cleanedSite = site.replace(/^www\./, '');
+            listItem.textContent = cleanedSite;
 
             let unblockButton = document.createElement("button");
             unblockButton.textContent = "Unblock";
@@ -64,6 +66,7 @@ function displayBlockedChannelsList() {
 
 // Unblock a website
 function unblockSite(site) {
+    
     chrome.storage.sync.get({ blockedSites: [] }, function (data) {
         let blockedSites = data.blockedSites.filter(blockedSite => blockedSite !== site);
         chrome.storage.sync.set({ blockedSites: blockedSites }, function () {
