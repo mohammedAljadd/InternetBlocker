@@ -37,22 +37,26 @@ function checkAndBlockUrl(url, tabId) {
             
             // User search for channel that contains space
             const urlParams = new URLSearchParams(new URL(url).search);
-            const searchQuery = urlParams.get('search_query');
+            const searchQuery = urlParams.get('search_query'); // will always be the same as we put in search bar, even if it contains spaces
 
             if(url.includes("search_query")){
-
                 let modifiedStr = searchQuery.replace(/\s+/g, "");
                 if(blockedYoutubeChannels.includes(modifiedStr)){
                     chrome.tabs.update(tabId, { url: chrome.runtime.getURL("/redirect.html") });
                     return;
                 }
             }
-
+            
+        
+            
             shouldBlock = blockedYoutubeChannels.some(site => {
-                const regexPattern = site.replace(/\*/g, '.*').replace(/\s+/g, '\\s+');
+                const regexPattern = site.replace(/\+/g, '\\+').replace(/\*/g, '.*').replace(/\s+/g, '\\s+');
+                const decodedUrl = decodeURIComponent(url);
                 const regex = new RegExp(regexPattern, 'i');
-                return regex.test(url);
+                const result = regex.test(decodedUrl);
+                return result;
             });
+            
     
             if (shouldBlock) {
                 chrome.tabs.update(tabId, { url: chrome.runtime.getURL("/redirect.html") });
