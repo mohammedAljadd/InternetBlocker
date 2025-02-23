@@ -32,11 +32,11 @@ document.addEventListener("DOMContentLoaded", function () {
     
         let normalizedChannel = channelName.replace(/\s+/g, '').toLowerCase();
     
-        chrome.storage.sync.get({ blockedSites: [] }, function (data) {
-            let blockedSites = data.blockedSites;
-            if (!blockedSites.includes(normalizedChannel)) {
-                blockedSites.push(normalizedChannel);
-                chrome.storage.sync.set({ blockedSites: blockedSites }, function () {
+        chrome.storage.sync.get({ blockedChannels: [] }, function (data) {
+            let blockedChannels = data.blockedChannels;
+            if (!blockedChannels.includes(normalizedChannel)) {
+                blockedChannels.push(normalizedChannel);
+                chrome.storage.sync.set({ blockedChannels: blockedChannels }, function () {
                     console.log("Channel blocked:", normalizedChannel);
                     updateBlockingRules(normalizedChannel); // This will handle the message
                 });

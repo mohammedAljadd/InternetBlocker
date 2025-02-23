@@ -20,8 +20,9 @@ function checkAndBlockUrl(url, tabId) {
     
     let isYoutubeUrl = false;
 
-    chrome.storage.sync.get({ blockedSites: [] }, (data) => {
+    chrome.storage.sync.get({ blockedSites: [], blockedChannels: [] }, (data) => {
         const blockedSites = data.blockedSites;
+        const blockedYoutubeChannels = data.blockedChannels;
         let shouldBlock = false;
     
         if (url.includes("youtube.com")) {
@@ -31,8 +32,8 @@ function checkAndBlockUrl(url, tabId) {
                 chrome.tabs.update(tabId, { url: chrome.runtime.getURL("/redirect.html") });
                 return;
             }
-    
-            shouldBlock = blockedSites.some(site => {
+            
+            shouldBlock = blockedYoutubeChannels.some(site => {
                 const regexPattern = site.replace(/\*/g, '.*').replace(/\s+/g, '\\s+');
                 const regex = new RegExp(regexPattern, 'i');
                 return regex.test(url);

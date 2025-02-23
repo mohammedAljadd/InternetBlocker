@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
     displayBlockedList();
+    displayBlockedChannelsList();
 });
 
 // Display the list of blocked websites
@@ -25,13 +26,49 @@ function displayBlockedList() {
     });
 }
 
+
+function displayBlockedChannelsList() {
+    chrome.storage.sync.get({ blockedChannels: [] }, function (data) {
+        let blockedChannels = data.blockedChannels;
+        let listElement = document.getElementById("blocked-youtube-channel-list");
+        listElement.innerHTML = "";
+
+        blockedChannels.forEach(site => {
+            let listItem = document.createElement("li");
+            listItem.textContent = site;
+
+            let unblockButton = document.createElement("button");
+            unblockButton.textContent = "Unblock";
+            unblockButton.addEventListener("click", function () {
+                unblockYoutubeChannel(site);
+            });
+
+            listItem.appendChild(unblockButton);
+            listElement.appendChild(listItem);
+        });
+    });
+}
+
 // Unblock a website
 function unblockSite(site) {
     chrome.storage.sync.get({ blockedSites: [] }, function (data) {
         let blockedSites = data.blockedSites.filter(blockedSite => blockedSite !== site);
         chrome.storage.sync.set({ blockedSites: blockedSites }, function () {
             displayBlockedList(); // Refresh the list
-            updateBlockingRules(); // Update the blocking rules
+            displayBlockedChannelsList();
+            //updateBlockingRules(); // Update the blocking rules
+        });
+    });
+}
+
+// Unblock youtube channel
+function unblockYoutubeChannel(site) {
+    chrome.storage.sync.get({ blockedChannels: [] }, function (data) {
+        let blockedChannels = data.blockedChannels.filter(blockedSite => blockedSite !== site);
+        chrome.storage.sync.set({ blockedChannels: blockedChannels }, function () {
+            displayBlockedList(); // Refresh the list
+            displayBlockedChannelsList();
+            //updateBlockingRules(); // Update the blocking rules
         });
     });
 }
