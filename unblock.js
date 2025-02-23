@@ -40,7 +40,8 @@ function unblockSite(site) {
 function updateBlockingRules() {
     chrome.storage.sync.get({ blockedSites: [] }, function (data) {
         let blockedSites = data.blockedSites;
-
+        
+        
         chrome.declarativeNetRequest.getDynamicRules((existingRules) => {
             const removeIds = existingRules.map((rule) => rule.id);
             const newRules = [];
