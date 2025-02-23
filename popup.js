@@ -29,9 +29,10 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("block-channel").addEventListener("click", function () {
         let channelName = document.getElementById("channel-name").value.trim();
         if (!channelName) return;
-    
-        let normalizedChannel = channelName.replace(/\s+/g, '').toLowerCase();
-    
+        
+        let normalizedChannel = channelName.replace(/\s+/g, '').toLowerCase(); // channel names saved without space
+        
+
         chrome.storage.sync.get({ blockedChannels: [] }, function (data) {
             let blockedChannels = data.blockedChannels;
             if (!blockedChannels.includes(normalizedChannel)) {

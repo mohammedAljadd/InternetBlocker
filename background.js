@@ -20,19 +20,34 @@ function checkAndBlockUrl(url, tabId) {
     
     let isYoutubeUrl = false;
 
-    chrome.storage.sync.get({ blockedSites: [], blockedChannels: [] }, (data) => {
+    chrome.storage.sync.get({ blockedSites: [], blockedChannels: [], adultSites: [] }, (data) => {
         const blockedSites = data.blockedSites;
         const blockedYoutubeChannels = data.blockedChannels;
+        const adultSites = data.adultSites;
+
         let shouldBlock = false;
     
         if (url.includes("youtube.com")) {
             isYoutubeUrl = true;
     
-            if (url.includes("/shorts/")) {
+            if (url.includes("/shorts/")) { // Block shors
                 chrome.tabs.update(tabId, { url: chrome.runtime.getURL("/redirect.html") });
                 return;
             }
             
+            // User search for channel that contains space
+            const urlParams = new URLSearchParams(new URL(url).search);
+            const searchQuery = urlParams.get('search_query');
+
+            if(url.includes("search_query")){
+
+                let modifiedStr = searchQuery.replace(/\s+/g, "");
+                if(blockedYoutubeChannels.includes(modifiedStr)){
+                    chrome.tabs.update(tabId, { url: chrome.runtime.getURL("/redirect.html") });
+                    return;
+                }
+            }
+
             shouldBlock = blockedYoutubeChannels.some(site => {
                 const regexPattern = site.replace(/\*/g, '.*').replace(/\s+/g, '\\s+');
                 const regex = new RegExp(regexPattern, 'i');
@@ -58,20 +73,15 @@ function checkAndBlockUrl(url, tabId) {
             }
     
             // Now check adult sites AFTER storage finishes
-            chrome.storage.sync.get({ adultSites: [] }, (data) => {
-                const adultSites = data.adultSites;
-                shouldBlock = adultSites.some(site => {
-                    const regex = new RegExp(site.replace(/\*/g, '.*'), 'i');
-                    return regex.test(url);
-                    
-                });
+            shouldBlock = adultSites.some(site => {
+                const regex = new RegExp(site.replace(/\*/g, '.*'), 'i');
+                return regex.test(url);
                 
-                if(shouldBlock){
-                    chrome.tabs.update(tabId, { url: chrome.runtime.getURL("/redirect.html") });
-                }
-
-
             });
+            
+            if(shouldBlock){
+                chrome.tabs.update(tabId, { url: chrome.runtime.getURL("/redirect.html") });
+            }
         }
     });
     
