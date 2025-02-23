@@ -9,6 +9,14 @@ function displayBlockedList() {
         let blockedSites = data.blockedSites;
         let listElement = document.getElementById("blocked-list");
         listElement.innerHTML = "";
+        
+        // Sort blocked sites list
+        blockedSites.sort((a, b) => {
+            const cleanA = a.replace(/^www\./, ''); // Remove 'www.' if it exists
+            const cleanB = b.replace(/^www\./, '');
+            return cleanA.localeCompare(cleanB); // Compare the cleaned strings
+        });
+        
 
         blockedSites.forEach(site => {
             let listItem = document.createElement("li");
@@ -32,6 +40,11 @@ function displayBlockedChannelsList() {
         let blockedChannels = data.blockedChannels;
         let listElement = document.getElementById("blocked-youtube-channel-list");
         listElement.innerHTML = "";
+
+        // Sort blocked channels names list
+        blockedChannels.sort((a, b) => a.localeCompare(b));
+
+
 
         blockedChannels.forEach(site => {
             let listItem = document.createElement("li");
