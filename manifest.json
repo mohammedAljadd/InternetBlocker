@@ -14,7 +14,7 @@
             "js": ["content.js"]
         }
     ],
-    "name": "Internet Blocker 2",
+    "name": "InternetGuard",
     "version": "2.0",
     "description": "Blocks distracting websites.",
     "permissions": ["storage", "declarativeNetRequest", "scripting", "tabs", "nativeMessaging", "storage"],
