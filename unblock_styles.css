@@ -1,0 +1,87 @@
+/* Reset some default styles */
+body, h1, h2, ul {
+    margin: 0;
+    padding: 0;
+}
+
+/* Apply a base font style */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+    color: #333;
+    display: flex;
+    align-items: flex-start; /* Align items to the top-left */
+    justify-content: flex-start;
+    height: 100vh;
+    flex-direction: column;
+    padding: 20px; /* Padding around body */
+}
+
+/* Container for the title */
+div {
+    max-width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Title styling */
+h1 {
+    font-size: 24px;
+    color: #444;
+    text-align: center; /* Center the title */
+}
+
+/* Section header */
+h2 {
+    font-size: 20px;
+    margin-top: 20px;
+    color: #555;
+}
+
+/* Styling for blocked content lists */
+.blocked-content {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    font-size: 14px;
+}
+
+/* List items for blocked content */
+.blocked-content li {
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: flex-start; /* Align items to the left */
+    align-items: center;
+}
+
+/* Button styling inside list items */
+.blocked-content li button {
+    background-color: #910000;
+    color: white;
+    border: none;
+    padding: 4px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-left: 10px;
+}
+
+.blocked-content li button:hover {
+    background-color: #ff0000;
+}
+
+.blocked-content li button:active {
+    background-color: #3e8e41;
+}
+
+/* Status message */
+#status {
+    margin-top: 20px;
+    font-weight: bold;
+    color: #e74c3c;
+    font-size: 18px;
+}

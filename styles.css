@@ -1,38 +1,88 @@
+/* Global Styles */
 body {
-    font-family: Arial, sans-serif;
-    text-align: center;
-    padding: 50px;
-    background-color: #f8f9fa;
-}
-.container {
-    max-width: 400px;
-    margin: auto;
-    background: white;
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f7fc;
+    color: #333;
+    margin: 0;
     padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 400px;
 }
-button {
-    background-color: #ff4d4d;
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    cursor: pointer;
-    border-radius: 5px;
+
+h3 {
+    color: #4a90e2;
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+p {
     font-size: 16px;
+    color: #4caf50;
+    font-weight: bold;
 }
-button:hover {
-    background-color: #cc0000;
-}
-.button {
-    display: inline-block;
-    padding: 10px 20px;
-    margin-top: 20px;
+
+/* Buttons */
+button {
+    background-color: #4CAF50;
     color: white;
-    background-color: #007bff;
-    text-decoration: none;
+    font-size: 16px;
+    padding: 10px 20px;
+    border: none;
     border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin: 10px 0;
+    width: 100%;
 }
-.button:hover {
-    background-color: #0056b3;
+
+button:hover {
+    background-color: #45a049;
+}
+
+button:active {
+    background-color: #3e8e41;
+}
+
+/* Input Fields */
+input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    font-size: 16px;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    background-color: #fff;
+}
+
+input[type="text"]:focus {
+    border-color: #4CAF50;
+    outline: none;
+}
+
+/* Container */
+.container {
+    max-width: 700px;
+    margin: 0 auto;
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Manage Section */
+#manage-blocked {
+    background-color: #f4b400;
+}
+
+#manage-blocked:hover {
+    background-color: #f39c12;
+}
+
+/* Save Button */
+#save-blocked-data {
+    background-color: #2196F3;
+}
+
+#save-blocked-data:hover {
+    background-color: #1976D2;
 }
