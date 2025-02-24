@@ -1,0 +1,90 @@
+/* Global Styles */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f7fc;
+    color: #333;
+    margin: 0;
+    padding: 10px; /* Reduce padding to save space */
+    width: 400px; /* Set a fixed width for the popup */
+    height: 500px; /* Set a fixed height for the popup */
+    overflow: hidden; /* Prevent scrolling */
+    box-sizing: border-box; /* Include padding in width/height calculation */
+}
+
+h3 {
+    color: #4a90e2;
+    font-size: 18px; /* Reduce font size to save space */
+    margin-bottom: 8px;
+}
+
+p {
+    font-size: 14px; /* Reduce font size to save space */
+    color: #4caf50;
+    font-weight: bold;
+}
+
+/* Buttons */
+button {
+    background-color: #4CAF50;
+    color: white;
+    font-size: 14px; /* Reduce font size to save space */
+    padding: 8px 16px; /* Reduce padding to save space */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin: 8px 0; /* Reduce margin to save space */
+    width: 100%;
+    box-sizing: border-box; /* Include padding in width calculation */
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+button:active {
+    background-color: #3e8e41;
+}
+
+/* Input Fields */
+input[type="text"] {
+    width: calc(100% - 16px); /* Account for padding */
+    padding: 8px; /* Reduce padding to save space */
+    margin: 8px 0; /* Reduce margin to save space */
+    font-size: 14px; /* Reduce font size to save space */
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box; /* Include padding in width calculation */
+    background-color: #fff;
+}
+
+input[type="text"]:focus {
+    border-color: #4CAF50;
+    outline: none;
+}
+
+/* Status message */
+#message {
+    margin-top: 16px; /* Reduce margin to save space */
+    font-weight: bold;
+    color: #e74c3c;
+    font-size: 14px; /* Reduce font size to save space */
+}
+
+/* Manage Section */
+#manage-blocked {
+    background-color: #f4b400;
+}
+
+#manage-blocked:hover {
+    background-color: #f39c12;
+}
+
+/* Save Button */
+#save-blocked-data {
+    background-color: #2196F3;
+}
+
+#save-blocked-data:hover {
+    background-color: #1976D2;
+}

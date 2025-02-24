@@ -28,7 +28,7 @@ function setManualBlockedLists(sites, channels, adultSites) {
 }
 
 
-setManualBlockedLists(
+/* setManualBlockedLists(
     ["www.facebook.com", "www.tiktok.com", "www.instagram.com", "www.tinder.com", "www.x.com", "www.messenger.com",
      "www.pessmokepatch.com", "www.watchseries.pe", "www.watchseries.bar", "omegle.onl",
      "www.netflix.com", "www.twitch.tv", "ww4.123moviesfree.net", "www.chatroulette.com",  "www.chatrandom.com",
@@ -36,7 +36,7 @@ setManualBlockedLists(
 
     ["waffloos", "keegzn", "souhaillhfit", "Chanqaoui", "RawSoueelt", "canal+sport", "zozvlogs", "lennybarn", "Treyten", "Treytenextra"], // Blocked YouTube channels
     ["pornhub.com", "xnxx.com", "xvideos.com", "youporn.com", "redtube.com", "8tube.xxx", "onlyfans.com", "Brazzers.com", "sex.com"] // Blocked adult sites
-);
+); */
 
 
 

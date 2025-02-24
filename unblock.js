@@ -128,7 +128,7 @@ function unblockAdultSite(site) {
         chrome.storage.sync.set({ adultSites: adultSites }, function () {
             displayBlockedList(); // Refresh the list
             displayBlockedChannelsList();
-            //displayBlockedAdultList();
+            displayBlockedAdultList();
             //updateBlockingRules(); // Update the blocking rules
         });
     });
@@ -165,3 +165,5 @@ function updateBlockingRules() {
         });
     });
 }
+
+
