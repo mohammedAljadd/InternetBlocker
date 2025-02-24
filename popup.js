@@ -127,3 +127,33 @@ function updateBlockingRules(website) {
         });
     });
 }
+
+
+document.getElementById("save-blocked-data").addEventListener("click", function () {
+    // Fetch blocked data from storage
+    chrome.storage.sync.get({ blockedSites: [], blockedChannels: [], adultSites: [] }, function (data) {
+        let blockedSites = data.blockedSites;
+        let blockedChannels = data.blockedChannels;
+        let adultSites = data.adultSites;
+        
+        // Prepare the text content for the file
+        let textContent = "Blocked Sites:\n\n" + blockedSites.join("\n") + "\n\n";
+        textContent += "Blocked YouTube Channels:\n\n" + blockedChannels.join("\n") + "\n\n";
+        textContent += "Blocked Adult Sites:\n\n" + adultSites.join("\n");
+
+        // Create a Blob (representing the file data)
+        let blob = new Blob([textContent], { type: 'text/plain' });
+
+        // Create a URL for the Blob and trigger a download
+        let url = URL.createObjectURL(blob);
+        let link = document.createElement("a");
+        link.href = url;
+        link.download = "blocked_data.txt"; // The name of the file
+
+        // Programmatically click the link to download the file
+        link.click();
+
+        // Release the Blob URL
+        URL.revokeObjectURL(url);
+    });
+});

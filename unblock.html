@@ -6,8 +6,8 @@
     <title>Unblock Websites</title>
     <style>
         body { font-family: Arial, sans-serif; }
-        #blocked-list { list-style: none; padding: 0; }
-        #blocked-list li { margin-bottom: 10px; }
+        #blocked-content { list-style: none; padding: 0; }
+        #blocked-content li { margin-bottom: 10px; }
         button { margin-left: 10px; }
     </style>
 </head>
@@ -18,10 +18,13 @@
     margin-right: auto;"><h1>List blocked sites and youtube channels</h1></div>
     
     <h2>1. Unblock Websites</h2>
-    <ul id="blocked-list"></ul>
+    <ul id="blocked-list" class="blocked-content"></ul>
 
     <h2>2. Unblock Youtube Channels</h2>
-    <ul id="blocked-youtube-channel-list"></ul>
+    <ul id="blocked-youtube-channel-list" class="blocked-content"></ul>
+
+    <h2>3. Blocked adult Websites</h2>
+    <ul id="blocked-adult-list" class="blocked-content"></ul>
     <p id="status"></p>
 </body>
 <script src="unblock.js"></script>

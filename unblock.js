@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
     displayBlockedList();
     displayBlockedChannelsList();
+    displayBlockedAdultList();
 });
 
 // Display the list of blocked websites
@@ -64,6 +65,35 @@ function displayBlockedChannelsList() {
     });
 }
 
+
+
+function displayBlockedAdultList() {
+    chrome.storage.sync.get({ adultSites: [] }, function (data) {
+        let adultSites = data.adultSites;
+        let listElement = document.getElementById("blocked-adult-list");
+        listElement.innerHTML = "";
+
+        // Sort blocked channels names list
+        adultSites.sort((a, b) => a.localeCompare(b));
+
+        
+
+        adultSites.forEach(site => {
+            let listItem = document.createElement("li");
+            listItem.textContent = site;
+
+            let unblockButton = document.createElement("button");
+            unblockButton.textContent = "Unblock";
+            unblockButton.addEventListener("click", function () {
+                unblockAdultSite(site);
+            });
+
+            listItem.appendChild(unblockButton);
+            listElement.appendChild(listItem);
+        });
+    });
+}
+
 // Unblock a website
 function unblockSite(site) {
     
@@ -72,6 +102,7 @@ function unblockSite(site) {
         chrome.storage.sync.set({ blockedSites: blockedSites }, function () {
             displayBlockedList(); // Refresh the list
             displayBlockedChannelsList();
+            displayBlockedAdultList();
             //updateBlockingRules(); // Update the blocking rules
         });
     });
@@ -84,10 +115,25 @@ function unblockYoutubeChannel(site) {
         chrome.storage.sync.set({ blockedChannels: blockedChannels }, function () {
             displayBlockedList(); // Refresh the list
             displayBlockedChannelsList();
+            displayBlockedAdultList();
             //updateBlockingRules(); // Update the blocking rules
         });
     });
 }
+
+// Unblock adult site
+function unblockAdultSite(site) {
+    chrome.storage.sync.get({ adultSites: [] }, function (data) {
+        let adultSites = data.adultSites.filter(blockedSite => blockedSite !== site);
+        chrome.storage.sync.set({ adultSites: adultSites }, function () {
+            displayBlockedList(); // Refresh the list
+            displayBlockedChannelsList();
+            //displayBlockedAdultList();
+            //updateBlockingRules(); // Update the blocking rules
+        });
+    });
+}
+
 
 // Update blocking rules dynamically
 function updateBlockingRules() {

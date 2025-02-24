@@ -14,10 +14,10 @@
             "js": ["content.js"]
         }
     ],
-    "name": "Internet Blocker",
-    "version": "1.0",
+    "name": "Internet Blocker 2",
+    "version": "2.0",
     "description": "Blocks distracting websites.",
-    "permissions": ["storage", "declarativeNetRequest", "scripting", "tabs"],
+    "permissions": ["storage", "declarativeNetRequest", "scripting", "tabs", "nativeMessaging", "storage"],
     "host_permissions": ["<all_urls>"],
     "background": {
       "service_worker": "background.js"
