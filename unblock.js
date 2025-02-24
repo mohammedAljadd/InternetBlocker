@@ -68,17 +68,17 @@ function displayBlockedChannelsList() {
 
 
 function displayBlockedAdultList() {
-    chrome.storage.sync.get({ adultSites: [] }, function (data) {
-        let adultSites = data.adultSites;
+    chrome.storage.sync.get({ pornSites: [] }, function (data) {
+        let pornSites = data.pornSites;
         let listElement = document.getElementById("blocked-adult-list");
         listElement.innerHTML = "";
 
         // Sort blocked channels names list
-        adultSites.sort((a, b) => a.localeCompare(b));
+        pornSites.sort((a, b) => a.localeCompare(b));
 
         
 
-        adultSites.forEach(site => {
+        pornSites.forEach(site => {
             let listItem = document.createElement("li");
             listItem.textContent = site;
 
@@ -123,9 +123,9 @@ function unblockYoutubeChannel(site) {
 
 // Unblock adult site
 function unblockAdultSite(site) {
-    chrome.storage.sync.get({ adultSites: [] }, function (data) {
-        let adultSites = data.adultSites.filter(blockedSite => blockedSite !== site);
-        chrome.storage.sync.set({ adultSites: adultSites }, function () {
+    chrome.storage.sync.get({ pornSites: [] }, function (data) {
+        let pornSites = data.pornSites.filter(blockedSite => blockedSite !== site);
+        chrome.storage.sync.set({ pornSites: pornSites }, function () {
             displayBlockedList(); // Refresh the list
             displayBlockedChannelsList();
             displayBlockedAdultList();

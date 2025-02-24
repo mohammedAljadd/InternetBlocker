@@ -17,11 +17,11 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
 // Enter manualyy
 
-function setManualBlockedLists(sites, channels, adultSites) {
+function setManualBlockedLists(sites, channels, pornSites) {
     chrome.storage.sync.set({
         blockedSites: sites,
         blockedChannels: channels,
-        adultSites: adultSites
+        pornSites: pornSites
     }, () => {
         console.log("Blocked lists updated manually!");
     });
@@ -45,10 +45,10 @@ function checkAndBlockUrl(url, tabId) {
     
     let isYoutubeUrl = false;
     
-    chrome.storage.sync.get({ blockedSites: [], blockedChannels: [], adultSites: [] }, (data) => {
+    chrome.storage.sync.get({ blockedSites: [], blockedChannels: [], pornSites: [] }, (data) => {
         const blockedSites = data.blockedSites;
         const blockedYoutubeChannels = data.blockedChannels;
-        const adultSites = data.adultSites;
+        const pornSites = data.pornSites;
 
         let shouldBlock = false;
         
@@ -125,7 +125,7 @@ function checkAndBlockUrl(url, tabId) {
             }
     
             // Now check adult sites AFTER storage finishes
-            shouldBlock = adultSites.some(site => {
+            shouldBlock = pornSites.some(site => {
                 const regex = new RegExp(site.replace(/\*/g, '.*'), 'i');
                 return regex.test(url);
                 

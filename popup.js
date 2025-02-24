@@ -63,11 +63,11 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
-        chrome.storage.sync.get({ adultSites: [] }, function (data) {
-            let adultSites = data.adultSites;
-            if (!adultSites.includes(site)) {
-                adultSites.push(site);
-                chrome.storage.sync.set({ adultSites: adultSites }, function () {
+        chrome.storage.sync.get({ pornSites: [] }, function (data) {
+            let pornSites = data.pornSites;
+            if (!pornSites.includes(site)) {
+                pornSites.push(site);
+                chrome.storage.sync.set({ pornSites: pornSites }, function () {
                     console.log("Adult site blocked:", site);
                     messageElement.textContent = `Blocked: ${site}`;
                     messageElement.style.color = "red";
@@ -131,15 +131,15 @@ function updateBlockingRules(website) {
 
 document.getElementById("save-blocked-data").addEventListener("click", function () {
     // Fetch blocked data from storage
-    chrome.storage.sync.get({ blockedSites: [], blockedChannels: [], adultSites: [] }, function (data) {
+    chrome.storage.sync.get({ blockedSites: [], blockedChannels: [], pornSites: [] }, function (data) {
         let blockedSites = data.blockedSites;
         let blockedChannels = data.blockedChannels;
-        let adultSites = data.adultSites;
+        let pornSites = data.pornSites;
         
         // Prepare the text content for the file
         let textContent = "Blocked Sites:\n\n" + blockedSites.join("\n") + "\n\n";
         textContent += "Blocked YouTube Channels:\n\n" + blockedChannels.join("\n") + "\n\n";
-        textContent += "Blocked Adult Sites:\n\n" + adultSites.join("\n");
+        textContent += "Blocked Adult Sites:\n\n" + pornSites.join("\n");
 
         // Create a Blob (representing the file data)
         let blob = new Blob([textContent], { type: 'text/plain' });
