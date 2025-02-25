@@ -54,7 +54,7 @@ function checkAndBlockUrl(url, tabId) {
         
         if (url.includes("youtube.com")) {
             isYoutubeUrl = true;
-    
+            
             if (url.includes("/shorts/")) { // Block shors
                 chrome.tabs.update(tabId, { url: chrome.runtime.getURL("/redirect.html?msg=Short is blocked") });
                 return;
@@ -64,44 +64,47 @@ function checkAndBlockUrl(url, tabId) {
             const urlParams = new URLSearchParams(new URL(url).search);
             const searchQuery = urlParams.get('search_query'); // will always be the same as we put in search bar, even if it contains spaces
 
+            // Channel searched
             if(url.includes("search_query")){
                 let modifiedStr = searchQuery.replace(/\s+/g, "");
+
                 if(blockedYoutubeChannels.includes(modifiedStr)){
                     chrome.tabs.update(tabId, { 
-                        url: chrome.runtime.getURL(`/redirect.html?msg=${encodeURIComponent(modifiedStr + " is blocked")}`) 
+                        url: chrome.runtime.getURL(`/redirect.html?msg=${encodeURIComponent(modifiedStr + " is blockesd")}`) 
                     });
                     return;
                 }
             }
+            // Video clicked
+            else{
+                let matchedChannel = null;
             
-            let matchedChannel = null;
-            
-            shouldBlock = blockedYoutubeChannels.some(site => {
-                const regexPattern = site.replace(/\+/g, '\\+').replace(/\*/g, '.*').replace(/\s+/g, '\\s+');
-                const decodedUrl = decodeURIComponent(url);
-                const regex = new RegExp(regexPattern, 'i');
-                const result = regex.test(decodedUrl);
-
-                if(result){
-                    matchedChannel = site;
-                }
-                return result;
-            });
-            
-    
-            if (shouldBlock) {
-                chrome.tabs.update(tabId, { 
-                    url: chrome.runtime.getURL(`/redirect.html?msg=${encodeURIComponent(matchedChannel + " is blocked")}`) 
+                shouldBlock = blockedYoutubeChannels.some(site => {
+                    const regexPattern = site.replace(/\+/g, '\\+').replace(/\*/g, '.*').replace(/\s+/g, '\\s+');
+                    const decodedUrl = decodeURIComponent(url);
+                    const regex = new RegExp(regexPattern, 'i');
+                    const result = regex.test(decodedUrl);
+                    
+                    if(result){
+                        matchedChannel = site;
+                    }
+                    return result;
                 });
                 
-                return;
+        
+                if (shouldBlock) {
+                    chrome.tabs.update(tabId, { 
+                        url: chrome.runtime.getURL(`/redirect.html?msg=${encodeURIComponent(matchedChannel + " is blocked")}`) 
+                    });
+                    
+                    return;
+                }
             }
+            
         }
         let blockedSite = null;
         
         if (!isYoutubeUrl) {
-            console.log(url);
-            
             shouldBlock = blockedSites.some(site => {
                 const regex = new RegExp(site.replace(/\*/g, '.*'), 'i');
                 const result = regex.test(url);
@@ -117,7 +120,6 @@ function checkAndBlockUrl(url, tabId) {
 
             // Blocking regular website
             if (shouldBlock) {
-                console.log("Here");
                 chrome.tabs.update(tabId, { 
                     url: chrome.runtime.getURL(`/redirect.html?msg=${encodeURIComponent(blockedSite + " is blocked")}`)
                 });
