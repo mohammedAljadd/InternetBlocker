@@ -160,3 +160,77 @@ document.getElementById("save-blocked-data").addEventListener("click", function 
 
 
 
+// Load data
+
+document.getElementById("load-blocked-data").addEventListener("click", function () {
+    document.getElementById("file-upload").click();
+    console.log("Said");
+    }
+
+);
+  
+
+document.getElementById("file-upload").addEventListener("change", function(event) {
+    const file = event.target.files[0];  // Get the uploaded file
+    
+    if (file && file.type === "text/plain") {  // Check if the file is a .txt file
+        const reader = new FileReader();
+        
+        // When the file is read
+        reader.onload = function(e) {
+            const fileContent = e.target.result;  // Get the content of the file
+            const lines = fileContent.split(/\r?\n/);  // Split content into lines
+            
+            // Initialize the data arrays
+            let blockedSites = [];
+            let blockedChannels = [];
+            let pornSites = [];
+            
+            // Variable to track the current section
+            let currentSection = null;
+
+            // Loop through each line in the file
+            lines.forEach((line) => {
+                line = line.trim();  // Trim whitespace and newline characters
+                
+                // Handle the headers to identify the sections
+                if (line.startsWith("Blocked Sites:")) {
+                    currentSection = "blockedSites";
+                } else if (line.startsWith("Blocked YouTube Channels:")) {
+                    currentSection = "blockedChannels";
+                } else if (line.startsWith("Blocked Adult Sites:")) {
+                    currentSection = "pornSites";
+                } else {
+                    // Add the line to the appropriate section
+                    if (currentSection === "blockedSites" && line) {
+                        blockedSites.push(line);
+                    } else if (currentSection === "blockedChannels" && line) {
+                        blockedChannels.push(line);
+                    } else if (currentSection === "pornSites" && line) {
+                        pornSites.push(line);
+                    }
+                }
+            });
+            
+            // Now save the data into Chrome storage
+            chrome.storage.sync.set({
+                blockedSites: blockedSites,
+                blockedChannels: blockedChannels,
+                pornSites: pornSites
+            }, function() {
+                const messageElement = document.getElementById("message");
+                if (messageElement) {
+                    messageElement.textContent = "Blocked sites, channels, and porn sites loaded!";
+                    messageElement.style.color = "green";
+                }
+                
+                console.log("Blocked sites, channels, and adult sites saved to Chrome storage.");
+            });
+        };
+        
+        // Read the file as text
+        reader.readAsText(file);
+    } else {
+        alert("Please upload a valid .txt file.");
+    }
+});

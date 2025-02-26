@@ -13,8 +13,8 @@ body {
 
 h3 {
     color: #4a90e2;
-    font-size: 18px; /* Reduce font size to save space */
-    margin-bottom: 8px;
+    font-size: 16px; /* Reduce font size to save space */
+    margin-bottom: 2px;
 }
 
 p {
@@ -25,7 +25,6 @@ p {
 
 /* Buttons */
 button {
-    background-color: #4CAF50;
     color: white;
     font-size: 14px; /* Reduce font size to save space */
     padding: 8px 16px; /* Reduce padding to save space */
@@ -38,13 +37,37 @@ button {
     box-sizing: border-box; /* Include padding in width calculation */
 }
 
+#block-site, #block-channel, #block-adult-site{
+    background-color: #f54c4c;
+}
+
+#load-blocked-data{
+    background-color: rgb(0, 174, 0);
+}
+
+#block-site:hover{
+    background-color: #ff0000;
+}
+#block-channel:hover{
+    background-color: #ff0000;
+}
+#block-adult-site:hover{
+    background-color: #ff0000;
+}
+
+#load-blocked-data:hover{
+    background-color: rgb(0, 143, 0);
+}
+
+/*
+
 button:hover {
-    background-color: #45a049;
+    background-color: #206624;
 }
 
 button:active {
     background-color: #3e8e41;
-}
+}*/
 
 /* Input Fields */
 input[type="text"] {
@@ -59,13 +82,13 @@ input[type="text"] {
 }
 
 input[type="text"]:focus {
-    border-color: #4CAF50;
+    border-color: #216e24;
     outline: none;
 }
 
 /* Status message */
 #message {
-    margin-top: 16px; /* Reduce margin to save space */
+    margin-top: 4px; /* Reduce margin to save space */
     font-weight: bold;
     color: #e74c3c;
     font-size: 14px; /* Reduce font size to save space */

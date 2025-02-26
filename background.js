@@ -5,6 +5,7 @@ chrome.storage.onChanged.addListener((changes, areaName) => {
     if (areaName === "sync" && changes.blockedSites) {
         blockedSites = changes.blockedSites.newValue;
         updateBlockRules(blockedSites);
+        
     }
 });
 
@@ -102,9 +103,11 @@ function checkAndBlockUrl(url, tabId) {
             }
             
         }
-        let blockedSite = null;
         
         if (!isYoutubeUrl) {
+            
+            let blockedSite = null;
+
             shouldBlock = blockedSites.some(site => {
                 const regex = new RegExp(site.replace(/\*/g, '.*'), 'i');
                 const result = regex.test(url);
@@ -120,9 +123,10 @@ function checkAndBlockUrl(url, tabId) {
 
             // Blocking regular website
             if (shouldBlock) {
-                chrome.tabs.update(tabId, { 
-                    url: chrome.runtime.getURL(`/redirect.html?msg=${encodeURIComponent(blockedSite + " is blocked")}`)
-                });
+                console.log("blockedSite " + blockedSite);
+                // chrome.tabs.update(tabId, { 
+                //     url: chrome.runtime.getURL(`/redirect2.html?msg=${encodeURIComponent(blockedSite + " is blocked")}`)
+                // });
                 return;
             }
     
@@ -134,7 +138,7 @@ function checkAndBlockUrl(url, tabId) {
             });
             
             if(shouldBlock){
-                chrome.tabs.update(tabId, { url: chrome.runtime.getURL("/redirect.html") });
+                // chrome.tabs.update(tabId, { url: chrome.runtime.getURL("/redirect2.html") });
             }
         }
     });
@@ -153,7 +157,7 @@ function updateBlockRules(blockedSites) {
             newRules.push({
                 id: ruleId++,
                 priority: 1,
-                action: { type: "redirect", redirect: { extensionPath: "/redirect.html" } },
+                action: { type: "redirect", redirect: { extensionPath: "/redirect2.html" } },
                 condition: {
                     urlFilter: site.includes('*') ? site : `*://${site}/*`,
                     resourceTypes: ["main_frame"]
