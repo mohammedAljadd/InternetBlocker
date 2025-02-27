@@ -14,8 +14,8 @@
             "js": ["content.js"]
         }
     ],
-    "name": "InternetGuard",
-    "version": "2.0",
+    "name": "InternetGuard 3",
+    "version": "3.0.0",
     "description": "Blocks distracting websites : regular websites, youtube channels/shorts and porn websites.",
     "permissions": ["storage", "declarativeNetRequest", "scripting", "tabs", "nativeMessaging", "storage"],
     "host_permissions": ["<all_urls>"],
