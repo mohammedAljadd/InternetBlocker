@@ -2,7 +2,7 @@
     "manifest_version": 3,
     "web_accessible_resources": [
     {
-      "resources": ["redirect.html", "redirect2.html"],
+      "resources": ["redirect.html"],
       "matches": ["<all_urls>"]
     }
   ],
