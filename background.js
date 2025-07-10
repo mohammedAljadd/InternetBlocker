@@ -29,17 +29,6 @@ function setManualBlockedLists(sites, channels, pornSites) {
 }
 
 
-/* setManualBlockedLists(
-    ["www.facebook.com", "www.tiktok.com", "www.instagram.com", "www.tinder.com", "www.x.com", "www.messenger.com",
-     "www.pessmokepatch.com", "www.watchseries.pe", "www.watchseries.bar", "omegle.onl",
-     "www.netflix.com", "www.twitch.tv", "ww4.123moviesfree.net", "www.chatroulette.com",  "www.chatrandom.com",
-    "omegle.life", "omegle.fun", "4chan.com", "4chan.org"],  // Blocked sites
-
-    ["waffloos", "keegzn", "souhaillhfit", "Chanqaoui", "RawSoueelt", "canal+sport", "zozvlogs", "lennybarn", "Treyten", "Treytenextra"], // Blocked YouTube channels
-    ["pornhub.com", "xnxx.com", "xvideos.com", "youporn.com", "redtube.com", "8tube.xxx", "onlyfans.com", "Brazzers.com", "sex.com"] // Blocked adult sites
-); */
-
-
 
 // Check if the current URL should be blocked
 function checkAndBlockUrl(url, tabId) {
@@ -56,7 +45,10 @@ function checkAndBlockUrl(url, tabId) {
         if (url.includes("youtube.com")) {
             isYoutubeUrl = true;
             
-            /*   */
+            if (url.includes("/shorts/")) { // Block shors
+                chrome.tabs.update(tabId, { url: chrome.runtime.getURL("/redirect.html?msg=Short is blocked") });
+                return;
+            }
             
             // User search for channel that contains space
             const urlParams = new URLSearchParams(new URL(url).search);
