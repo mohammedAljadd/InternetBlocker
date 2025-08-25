@@ -1,41 +1,76 @@
 let blockedSites = [];
+let isExtensionEnabled = true;
+
+// Initialize extension state on startup
+chrome.runtime.onStartup.addListener(() => {
+    initializeExtension();
+});
+
+chrome.runtime.onInstalled.addListener(() => {
+    initializeExtension();
+});
+
+function initializeExtension() {
+    chrome.storage.sync.get({ 
+        blockedSites: [], 
+        blockedChannels: [], 
+        pornSites: [],
+        extensionEnabled: true 
+    }, (data) => {
+        blockedSites = data.blockedSites;
+        isExtensionEnabled = data.extensionEnabled;
+        if (isExtensionEnabled) {
+            updateBlockRules(data.blockedSites);
+        }
+    });
+}
 
 // Listen for changes to blocked sites
 chrome.storage.onChanged.addListener((changes, areaName) => {
-    if (areaName === "sync" && changes.blockedSites) {
-        blockedSites = changes.blockedSites.newValue;
-        updateBlockRules(blockedSites);
-        
+    if (areaName === "sync") {
+        if (changes.blockedSites) {
+            blockedSites = changes.blockedSites.newValue;
+            if (isExtensionEnabled) {
+                updateBlockRules(blockedSites);
+            }
+        }
+        if (changes.extensionEnabled) {
+            isExtensionEnabled = changes.extensionEnabled.newValue;
+            if (isExtensionEnabled) {
+                chrome.storage.sync.get({ blockedSites: [] }, (data) => {
+                    updateBlockRules(data.blockedSites);
+                });
+            } else {
+                // Clear all blocking rules when disabled
+                clearAllBlockRules();
+            }
+        }
     }
 });
 
 // Listen for URL changes from the content script
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     if (message.type === "URL_CHANGED") {
-        checkAndBlockUrl(message.url, sender.tab.id);
+        if (isExtensionEnabled) {
+            checkAndBlockUrl(message.url, sender.tab.id);
+        }
     }
 });
 
-// Enter manualyy
-
-function setManualBlockedLists(sites, channels, pornSites) {
-    chrome.storage.sync.set({
-        blockedSites: sites,
-        blockedChannels: channels,
-        pornSites: pornSites
-    }, () => {
-        console.log("Blocked lists updated manually!");
-    });
-}
-
-
-
 // Check if the current URL should be blocked
 function checkAndBlockUrl(url, tabId) {
+    if (!isExtensionEnabled) return;
     
     let isYoutubeUrl = false;
     
-    chrome.storage.sync.get({ blockedSites: [], blockedChannels: [], pornSites: [] }, (data) => {
+    chrome.storage.sync.get({ 
+        blockedSites: [], 
+        blockedChannels: [], 
+        pornSites: [],
+        extensionEnabled: true 
+    }, (data) => {
+        if (!data.extensionEnabled) return;
+        
         const blockedSites = data.blockedSites;
         const blockedYoutubeChannels = data.blockedChannels;
         const pornSites = data.pornSites;
@@ -45,97 +80,97 @@ function checkAndBlockUrl(url, tabId) {
         if (url.includes("youtube.com")) {
             isYoutubeUrl = true;
             
-            if (url.includes("/shorts/")) { // Block shors
-                chrome.tabs.update(tabId, { url: chrome.runtime.getURL("/redirect.html?msg=Short is blocked") });
+            // Block YouTube Shorts
+            if (url.includes("/shorts/")) {
+                chrome.tabs.update(tabId, { 
+                    url: chrome.runtime.getURL("/redirect.html?msg=" + encodeURIComponent("YouTube Shorts are blocked")) 
+                });
                 return;
             }
             
-            // User search for channel that contains space
-            const urlParams = new URLSearchParams(new URL(url).search);
-            const searchQuery = urlParams.get('search_query'); // will always be the same as we put in search bar, even if it contains spaces
+            // Handle YouTube search queries
+            try {
+                const urlObj = new URL(url);
+                const urlParams = new URLSearchParams(urlObj.search);
+                const searchQuery = urlParams.get('search_query');
 
-            // Channel searched
-            if(url.includes("search_query")){
-                let modifiedStr = searchQuery.replace(/\s+/g, "");
+                if (searchQuery && url.includes("search_query")) {
+                    let modifiedStr = searchQuery.replace(/\s+/g, "").toLowerCase();
 
-                if(blockedYoutubeChannels.includes(modifiedStr)){
-                    chrome.tabs.update(tabId, { 
-                        url: chrome.runtime.getURL(`/redirect.html?msg=${encodeURIComponent(modifiedStr + " is blockesd")}`) 
-                    });
-                    return;
+                    if (blockedYoutubeChannels.some(channel => channel.toLowerCase() === modifiedStr)) {
+                        chrome.tabs.update(tabId, { 
+                            url: chrome.runtime.getURL(`/redirect.html?msg=${encodeURIComponent(searchQuery + " is blocked")}`) 
+                        });
+                        return;
+                    }
                 }
-            }
-            // Video clicked
-            else{
+                
+                // Check for blocked channels in video URLs
                 let matchedChannel = null;
-            
-                shouldBlock = blockedYoutubeChannels.some(site => {
-                    const regexPattern = site.replace(/\+/g, '\\+').replace(/\*/g, '.*').replace(/\s+/g, '\\s+');
-                    const decodedUrl = decodeURIComponent(url);
+                shouldBlock = blockedYoutubeChannels.some(channel => {
+                    const regexPattern = channel.replace(/\+/g, '\\+').replace(/\*/g, '.*').replace(/\s+/g, '');
+                    const decodedUrl = decodeURIComponent(url.toLowerCase());
                     const regex = new RegExp(regexPattern, 'i');
                     const result = regex.test(decodedUrl);
                     
-                    if(result){
-                        matchedChannel = site;
+                    if (result) {
+                        matchedChannel = channel;
                     }
                     return result;
                 });
                 
-        
                 if (shouldBlock) {
                     chrome.tabs.update(tabId, { 
                         url: chrome.runtime.getURL(`/redirect.html?msg=${encodeURIComponent(matchedChannel + " is blocked")}`) 
                     });
-                    
                     return;
                 }
+            } catch (e) {
+                console.error('Error parsing YouTube URL:', e);
             }
-            
         }
         
+        // Check regular websites (non-YouTube)
         if (!isYoutubeUrl) {
-            
             let blockedSite = null;
 
             shouldBlock = blockedSites.some(site => {
                 const regex = new RegExp(site.replace(/\*/g, '.*'), 'i');
                 const result = regex.test(url);
                 
-                if(result){
+                if (result) {
                     blockedSite = site;
                 }
                 return result;
             });
-            
-    
-            
 
-            // Blocking regular website
             if (shouldBlock) {
-                console.log("blockedSite " + blockedSite);
-                // chrome.tabs.update(tabId, { 
-                //     url: chrome.runtime.getURL(`/redirect2.html?msg=${encodeURIComponent(blockedSite + " is blocked")}`)
-                // });
+                console.log("Blocking site:", blockedSite);
+                chrome.tabs.update(tabId, { 
+                    url: chrome.runtime.getURL(`/redirect.html?msg=${encodeURIComponent(blockedSite + " is blocked")}`)
+                });
                 return;
             }
-    
-            // Now check adult sites AFTER storage finishes
+
+            // Check adult sites
             shouldBlock = pornSites.some(site => {
                 const regex = new RegExp(site.replace(/\*/g, '.*'), 'i');
                 return regex.test(url);
-                
             });
             
-            if(shouldBlock){
-                // chrome.tabs.update(tabId, { url: chrome.runtime.getURL("/redirect2.html") });
+            if (shouldBlock) {
+                chrome.tabs.update(tabId, { 
+                    url: chrome.runtime.getURL("/redirect.html?msg=" + encodeURIComponent("Adult content is blocked")) 
+                });
             }
         }
     });
-    
 }    
 
 // Update blocking rules dynamically
 function updateBlockRules(blockedSites) {
+    if (!isExtensionEnabled) return;
+    
     chrome.declarativeNetRequest.getDynamicRules((existingRules) => {
         const removeIds = existingRules.map((rule) => rule.id);
         const newRules = [];
@@ -158,5 +193,27 @@ function updateBlockRules(blockedSites) {
             removeRuleIds: removeIds,
             addRules: newRules,
         });
+    });
+}
+
+// Clear all blocking rules
+function clearAllBlockRules() {
+    chrome.declarativeNetRequest.getDynamicRules((existingRules) => {
+        const removeIds = existingRules.map((rule) => rule.id);
+        chrome.declarativeNetRequest.updateDynamicRules({
+            removeRuleIds: removeIds,
+            addRules: [],
+        });
+    });
+}
+
+// Manual blocking function (for testing)
+function setManualBlockedLists(sites, channels, pornSites) {
+    chrome.storage.sync.set({
+        blockedSites: sites,
+        blockedChannels: channels,
+        pornSites: pornSites
+    }, () => {
+        console.log("Blocked lists updated manually!");
     });
 }

@@ -1,11 +1,22 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Block Websites & YouTube Channels</title>
+    <title>InternetGuard 3</title>
     <link rel="stylesheet" href="popup.css">
-
 </head>
 <body>
+    <!-- Extension Toggle -->
+    <div class="toggle-container">
+        <span class="toggle-label">Extension Status</span>
+        <div class="toggle-switch" id="extension-toggle">
+            <div class="toggle-slider"></div>
+        </div>
+    </div>
+    
+    <div class="status-indicator" id="status-indicator">
+        Extension is Enabled
+    </div>
+
     <h3>Block this website</h3>
     <button id="block-site">Block This Site</button>
 
@@ -25,11 +36,8 @@
     <button id="load-blocked-data" class="load-blocked-data">Load Blocked Data from Text File</button>
     <input type="file" id="file-upload" accept=".txt" style="display: none;" />
 
-    
-    
-
-
     <p id="message" style="font-weight: bold;"></p>
+
+    <script src="popup.js"></script>
 </body>
-<script src="popup.js"></script>
 </html>

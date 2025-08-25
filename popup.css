@@ -4,80 +4,143 @@ body {
     background-color: #f4f7fc;
     color: #333;
     margin: 0;
-    padding: 10px; /* Reduce padding to save space */
-    width: 400px; /* Set a fixed width for the popup */
-    height: 500px; /* Set a fixed height for the popup */
-    overflow: hidden; /* Prevent scrolling */
-    box-sizing: border-box; /* Include padding in width/height calculation */
+    padding: 10px;
+    width: 400px;
+    height: 550px;
+    overflow-y: auto;
+    box-sizing: border-box;
 }
 
 h3 {
     color: #4a90e2;
-    font-size: 16px; /* Reduce font size to save space */
-    margin-bottom: 2px;
+    font-size: 16px;
+    margin-bottom: 8px;
+    margin-top: 15px;
 }
 
 p {
-    font-size: 14px; /* Reduce font size to save space */
+    font-size: 14px;
     color: #4caf50;
     font-weight: bold;
+}
+
+/* Extension Toggle */
+.toggle-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: white;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.toggle-label {
+    font-weight: bold;
+    color: #333;
+}
+
+.toggle-switch {
+    position: relative;
+    width: 50px;
+    height: 24px;
+    background-color: #ccc;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.toggle-switch.enabled {
+    background-color: #4caf50;
+}
+
+.toggle-switch .toggle-slider {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 20px;
+    height: 20px;
+    background-color: white;
+    border-radius: 50%;
+    transition: transform 0.3s;
+}
+
+.toggle-switch.enabled .toggle-slider {
+    transform: translateX(26px);
+}
+
+/* Status indicator */
+.status-indicator {
+    padding: 8px;
+    border-radius: 5px;
+    text-align: center;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.status-enabled {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.status-disabled {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
 }
 
 /* Buttons */
 button {
     color: white;
-    font-size: 14px; /* Reduce font size to save space */
-    padding: 8px 16px; /* Reduce padding to save space */
+    font-size: 14px;
+    padding: 8px 16px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s ease;
-    margin: 8px 0; /* Reduce margin to save space */
+    margin: 8px 0;
     width: 100%;
-    box-sizing: border-box; /* Include padding in width calculation */
+    box-sizing: border-box;
 }
 
-#block-site, #block-channel, #block-adult-site{
+button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+#block-site, #block-channel, #block-adult-site {
     background-color: #f54c4c;
 }
 
-#load-blocked-data{
+#load-blocked-data {
     background-color: rgb(0, 174, 0);
 }
 
-#block-site:hover{
+#block-site:hover:not(:disabled) {
     background-color: #ff0000;
 }
-#block-channel:hover{
+#block-channel:hover:not(:disabled) {
     background-color: #ff0000;
 }
-#block-adult-site:hover{
+#block-adult-site:hover:not(:disabled) {
     background-color: #ff0000;
 }
 
-#load-blocked-data:hover{
+#load-blocked-data:hover:not(:disabled) {
     background-color: rgb(0, 143, 0);
 }
 
-/*
-
-button:hover {
-    background-color: #206624;
-}
-
-button:active {
-    background-color: #3e8e41;
-}*/
-
 /* Input Fields */
 input[type="text"] {
-    width: calc(100% - 16px); /* Account for padding */
-    padding: 8px; /* Reduce padding to save space */
-    margin: 8px 0; /* Reduce margin to save space */
-    font-size: 14px; /* Reduce font size to save space */
+    width: calc(100% - 16px);
+    padding: 8px;
+    margin: 8px 0;
+    font-size: 14px;
     border: 2px solid #ccc;
     border-radius: 5px;
-    box-sizing: border-box; /* Include padding in width calculation */
+    box-sizing: border-box;
     background-color: #fff;
 }
 
@@ -86,12 +149,17 @@ input[type="text"]:focus {
     outline: none;
 }
 
+input[type="text"]:disabled {
+    background-color: #f5f5f5;
+    color: #999;
+}
+
 /* Status message */
 #message {
-    margin-top: 4px; /* Reduce margin to save space */
+    margin-top: 4px;
     font-weight: bold;
     color: #e74c3c;
-    font-size: 14px; /* Reduce font size to save space */
+    font-size: 14px;
 }
 
 /* Manage Section */
@@ -99,7 +167,7 @@ input[type="text"]:focus {
     background-color: #f4b400;
 }
 
-#manage-blocked:hover {
+#manage-blocked:hover:not(:disabled) {
     background-color: #f39c12;
 }
 
@@ -108,6 +176,6 @@ input[type="text"]:focus {
     background-color: #2196F3;
 }
 
-#save-blocked-data:hover {
+#save-blocked-data:hover:not(:disabled) {
     background-color: #1976D2;
 }
