@@ -3,28 +3,144 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Unblock Websites</title>
+    <title>Manage Blocked Content - InternetGuard 3</title>
     <link rel="stylesheet" href="unblock.css">
 </head>
 <body>
-
-    <div style="max-width: 90%; margin-left: auto; margin-right: auto; padding: 20px;">
-        <h1>List of Blocked Sites and YouTube Channels</h1>
+    <!-- Header -->
+    <div class="header">
+        <h1>🛡️ InternetGuard 3 - Manage Blocked Content</h1>
+        <div class="header-stats">
+            <div class="stat-item">
+                <span class="stat-number" id="total-blocked-sites">0</span>
+                <span class="stat-label">Blocked Sites</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number" id="total-blocked-channels">0</span>
+                <span class="stat-label">Blocked Channels</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number" id="total-blocked-adult">0</span>
+                <span class="stat-label">Adult Sites</span>
+            </div>
+        </div>
     </div>
 
-    <h2>1. Unblock Websites</h2>
-    <ul id="blocked-list" class="blocked-content"></ul>
+    <!-- Search and Filter Controls -->
+    <div class="controls-section">
+        <div class="search-container">
+            <input type="text" id="search-input" placeholder="🔍 Search blocked content..." />
+            <button id="clear-search">✕</button>
+        </div>
+        
+        <div class="filter-buttons">
+            <button class="filter-btn active" data-filter="all">All Content</button>
+            <button class="filter-btn" data-filter="sites">Websites</button>
+            <button class="filter-btn" data-filter="channels">YouTube Channels</button>
+            <button class="filter-btn" data-filter="adult">Adult Sites</button>
+        </div>
 
-    <h2>2. Unblock YouTube Channels</h2>
-    <ul id="blocked-youtube-channel-list" class="blocked-content"></ul>
+        <div class="bulk-actions">
+            <button id="select-all-btn">Select All</button>
+            <button id="unblock-selected-btn" class="danger-btn">Unblock Selected</button>
+            <button id="clear-all-btn" class="danger-btn">Clear All</button>
+        </div>
+    </div>
 
-    <h2>3. Blocked Adult Websites</h2>
-    <ul id="blocked-adult-list" class="blocked-content"></ul>
+    <!-- Content Sections -->
+    <div class="content-container">
+        
+        <!-- Regular Websites Section -->
+        <div class="section-container" id="sites-section">
+            <div class="section-header">
+                <h2>🌐 Blocked Websites</h2>
+                <div class="section-actions">
+                    <button class="add-btn" id="add-site-btn">+ Add Website</button>
+                    <button class="collapse-btn" data-target="blocked-list">−</button>
+                </div>
+            </div>
+            <div class="items-container">
+                <div class="empty-state" id="empty-sites">
+                    <div class="empty-icon">🌐</div>
+                    <p>No websites blocked yet</p>
+                    <button class="add-btn" onclick="document.getElementById('add-site-btn').click()">Add Your First Website</button>
+                </div>
+                <ul id="blocked-list" class="blocked-content"></ul>
+            </div>
+        </div>
 
+        <!-- YouTube Channels Section -->
+        <div class="section-container" id="channels-section">
+            <div class="section-header">
+                <h2>📺 Blocked YouTube Channels</h2>
+                <div class="section-actions">
+                    <button class="add-btn" id="add-channel-btn">+ Add Channel</button>
+                    <button class="collapse-btn" data-target="blocked-youtube-channel-list">−</button>
+                </div>
+            </div>
+            <div class="items-container">
+                <div class="empty-state" id="empty-channels">
+                    <div class="empty-icon">📺</div>
+                    <p>No YouTube channels blocked yet</p>
+                    <button class="add-btn" onclick="document.getElementById('add-channel-btn').click()">Add Your First Channel</button>
+                </div>
+                <ul id="blocked-youtube-channel-list" class="blocked-content"></ul>
+            </div>
+        </div>
 
-    
-    <p id="status"></p>
+        <!-- Adult Sites Section -->
+        <div class="section-container" id="adult-section">
+            <div class="section-header">
+                <h2>🔞 Blocked Adult Sites</h2>
+                <div class="section-actions">
+                    <button class="add-btn" id="add-adult-btn">+ Add Adult Site</button>
+                    <button class="collapse-btn" data-target="blocked-adult-list">−</button>
+                </div>
+            </div>
+            <div class="items-container">
+                <div class="empty-state" id="empty-adult">
+                    <div class="empty-icon">🔞</div>
+                    <p>No adult sites blocked yet</p>
+                    <button class="add-btn" onclick="document.getElementById('add-adult-btn').click()">Add Your First Adult Site</button>
+                </div>
+                <ul id="blocked-adult-list" class="blocked-content"></ul>
+            </div>
+        </div>
+    </div>
 
+    <!-- Add Item Modal -->
+    <div id="add-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-title">Add New Item</h3>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <input type="text" id="modal-input" placeholder="Enter URL or name...">
+                <div class="modal-help" id="modal-help">
+                    Enter the website URL or domain name
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="modal-cancel" class="secondary-btn">Cancel</button>
+                <button id="modal-add" class="primary-btn">Add</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Status and Actions -->
+    <div class="footer-actions">
+        <div class="status-container">
+            <p id="status" class="status-message"></p>
+        </div>
+        
+        <div class="action-buttons">
+            <button id="export-data" class="secondary-btn">📥 Export Data</button>
+            <button id="import-data" class="secondary-btn">📤 Import Data</button>
+            <input type="file" id="import-file" accept=".txt,.json" style="display: none;">
+        </div>
+    </div>
+
+    <script src="unblock.js"></script>
 </body>
-<script src="unblock.js"></script>
 </html>
