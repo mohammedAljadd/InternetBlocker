@@ -1,14 +1,12 @@
 {
     "manifest_version": 3,
     "web_accessible_resources": [
-    {
-      "resources": ["redirect.html"],
-      "matches": ["<all_urls>"]
-    }
-  ],
-  
-
-  "content_scripts": [
+        {
+            "resources": ["redirect.html"],
+            "matches": ["<all_urls>"]
+        }
+    ],
+    "content_scripts": [
         {
             "matches": ["<all_urls>"],
             "js": ["content.js"]
@@ -16,16 +14,22 @@
     ],
     "name": "InternetGuard 3",
     "version": "3.0.0",
-    "description": "Blocks distracting websites : regular websites, youtube channels/shorts and porn websites.",
-    "permissions": ["storage", "declarativeNetRequest", "scripting", "tabs", "nativeMessaging", "storage"],
+    "description": "Professional website blocker: blocks distracting websites, YouTube channels/shorts, and adult content with advanced controls.",
+    "permissions": [
+        "storage", 
+        "declarativeNetRequest", 
+        "scripting", 
+        "tabs", 
+        "nativeMessaging"
+    ],
     "host_permissions": ["<all_urls>"],
     "background": {
-      "service_worker": "background.js"
+        "service_worker": "background.js"
     },
     "action": {
-      "default_popup": "popup.html"
+        "default_popup": "popup.html"
     },
-    "icons": { "48":"images/icon48.png" }
-
-  }
-  
+    "icons": { 
+        "48": "images/icon48.png" 
+    }
+}

@@ -15,7 +15,8 @@ function initializeExtension() {
         blockedSites: [], 
         blockedChannels: [], 
         pornSites: [],
-        extensionEnabled: true 
+        extensionEnabled: true,
+        shortsBlocked: true
     }, (data) => {
         blockedSites = data.blockedSites;
         isExtensionEnabled = data.extensionEnabled;
@@ -67,24 +68,37 @@ function checkAndBlockUrl(url, tabId) {
         blockedSites: [], 
         blockedChannels: [], 
         pornSites: [],
-        extensionEnabled: true 
+        extensionEnabled: true,
+        shortsBlocked: true
     }, (data) => {
         if (!data.extensionEnabled) return;
         
         const blockedSites = data.blockedSites;
         const blockedYoutubeChannels = data.blockedChannels;
         const pornSites = data.pornSites;
+        const shortsBlocked = data.shortsBlocked;
 
         let shouldBlock = false;
         
         if (url.includes("youtube.com")) {
             isYoutubeUrl = true;
             
-            // Block YouTube Shorts
-            if (url.includes("/shorts/")) {
+            // Block YouTube Shorts based on setting
+            if (url.includes("/shorts/") && shortsBlocked) {
+                // Use chrome.tabs.update with replace: true to avoid back button issues
                 chrome.tabs.update(tabId, { 
-                    url: chrome.runtime.getURL("/redirect.html?msg=" + encodeURIComponent("YouTube Shorts are blocked")) 
+                    url: chrome.runtime.getURL("/redirect.html?msg=" + encodeURIComponent("YouTube Shorts are blocked") + "&blocked_url=" + encodeURIComponent(url))
                 });
+                // Execute script to replace history state to prevent back button loop
+                chrome.scripting.executeScript({
+                    target: { tabId: tabId },
+                    func: () => {
+                        if (window.history.length > 1) {
+                            // Try to go back to previous page, but if not possible, go to YouTube home
+                            window.history.replaceState(null, '', window.location.href);
+                        }
+                    }
+                }).catch(() => {}); // Ignore errors if script injection fails
                 return;
             }
             
@@ -99,7 +113,7 @@ function checkAndBlockUrl(url, tabId) {
 
                     if (blockedYoutubeChannels.some(channel => channel.toLowerCase() === modifiedStr)) {
                         chrome.tabs.update(tabId, { 
-                            url: chrome.runtime.getURL(`/redirect.html?msg=${encodeURIComponent(searchQuery + " is blocked")}`) 
+                            url: chrome.runtime.getURL(`/redirect.html?msg=${encodeURIComponent(searchQuery + " is blocked")}&blocked_url=${encodeURIComponent(url)}`) 
                         });
                         return;
                     }
@@ -121,7 +135,7 @@ function checkAndBlockUrl(url, tabId) {
                 
                 if (shouldBlock) {
                     chrome.tabs.update(tabId, { 
-                        url: chrome.runtime.getURL(`/redirect.html?msg=${encodeURIComponent(matchedChannel + " is blocked")}`) 
+                        url: chrome.runtime.getURL(`/redirect.html?msg=${encodeURIComponent(matchedChannel + " is blocked")}&blocked_url=${encodeURIComponent(url)}`) 
                     });
                     return;
                 }
@@ -147,7 +161,7 @@ function checkAndBlockUrl(url, tabId) {
             if (shouldBlock) {
                 console.log("Blocking site:", blockedSite);
                 chrome.tabs.update(tabId, { 
-                    url: chrome.runtime.getURL(`/redirect.html?msg=${encodeURIComponent(blockedSite + " is blocked")}`)
+                    url: chrome.runtime.getURL(`/redirect.html?msg=${encodeURIComponent(blockedSite + " is blocked")}&blocked_url=${encodeURIComponent(url)}`)
                 });
                 return;
             }
@@ -160,7 +174,7 @@ function checkAndBlockUrl(url, tabId) {
             
             if (shouldBlock) {
                 chrome.tabs.update(tabId, { 
-                    url: chrome.runtime.getURL("/redirect.html?msg=" + encodeURIComponent("Adult content is blocked")) 
+                    url: chrome.runtime.getURL("/redirect.html?msg=" + encodeURIComponent("Adult content is blocked") + "&blocked_url=" + encodeURIComponent(url))
                 });
             }
         }

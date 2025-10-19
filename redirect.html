@@ -10,17 +10,31 @@
     <div class="container">
         <h1 style="color: red;font-weight: bold;">هل نسيت؟</h1><hr>
         <h1>قد تموت في أي لحظة، فهل تستطيع حقاً أن تتحمل ظلمة القبر إذا كان الله غاضباً عليك؟</h1><hr>
-        <h1>“أَلَمْ يَعْلَم بِأَنَّ اللَّهَ يَرَىٰ”</h1><hr>
-        <h1>“يَعْلَمُ خَائِنَةَ الْأعْيُنِ وَمَا تُخْفِي الصُّدُورُ”</h1><hr>
-        <h1>“أَيَحْسَبُ أَن لَّمْ يَرَهُ أَحَدٌ”</h1><hr><hr>
+        <h1>"أَلَمْ يَعْلَم بِأَنَّ اللَّهَ يَرَىٰ"</h1><hr>
+        <h1>"يَعْلَمُ خَائِنَةَ الْأعْيُنِ وَمَا تُخْفِي الصُّدُورُ"</h1><hr>
+        <h1>"أَيَحْسَبُ أَن لَّمْ يَرَهُ أَحَدٌ"</h1><hr><hr>
     </div>
 
-    
-    
     <div class="container">
         <h1 id="message_to_show"></h1>
+        <div class="help-text">
+            <p>Choose how you want to continue:</p>
+        </div>
+        <div class="navigation-buttons">
+            <button onclick="goBackSafely()" class="safe-back-btn" title="Go to a safe previous page">
+                ← Go Back Safely
+            </button>
+            <button onclick="goToYouTubeHome()" class="youtube-home-btn" title="Visit YouTube homepage">
+                🏠 YouTube Home
+            </button>
+            <button onclick="closeTab()" class="close-tab-btn" title="Close this tab">
+                ✕ Close Tab
+            </button>
+        </div>
+        <div class="keyboard-shortcuts">
+            <small>Keyboard shortcuts: ESC (close), Alt+← (back), Ctrl+H (YouTube home)</small>
+        </div>
     </div>
-
 
     <script src="redirect.js"></script>
 </body>

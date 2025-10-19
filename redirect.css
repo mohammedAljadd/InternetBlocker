@@ -4,6 +4,7 @@ body {
     padding: 50px;
     background-color: #f8f9fa;
 }
+
 .container {
     max-width: 400px;
     margin: auto;
@@ -11,7 +12,9 @@ body {
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
 }
+
 button {
     background-color: #ff4d4d;
     color: white;
@@ -20,10 +23,72 @@ button {
     cursor: pointer;
     border-radius: 5px;
     font-size: 16px;
+    margin: 5px;
+    min-width: 120px;
+    transition: all 0.3s ease;
 }
+
 button:hover {
     background-color: #cc0000;
+    transform: translateY(-1px);
 }
+
+.navigation-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.help-text {
+    margin: 15px 0;
+    color: #666;
+    font-size: 14px;
+}
+
+.keyboard-shortcuts {
+    margin-top: 15px;
+    color: #888;
+    font-size: 11px;
+    line-height: 1.4;
+}
+
+.safe-back-btn {
+    background: linear-gradient(135deg, #4CAF50, #45a049);
+    font-size: 16px;
+    font-weight: bold;
+    padding: 15px 20px;
+}
+
+.safe-back-btn:hover {
+    background: linear-gradient(135deg, #45a049, #3d8b40);
+    box-shadow: 0 4px 8px rgba(76, 175, 80, 0.3);
+}
+
+.youtube-home-btn {
+    background: linear-gradient(135deg, #ff0000, #cc0000);
+    font-size: 16px;
+    font-weight: bold;
+    padding: 15px 20px;
+}
+
+.youtube-home-btn:hover {
+    background: linear-gradient(135deg, #cc0000, #b30000);
+    box-shadow: 0 4px 8px rgba(255, 0, 0, 0.3);
+}
+
+.close-tab-btn {
+    background: linear-gradient(135deg, #6c757d, #5a6268);
+    font-size: 16px;
+    font-weight: bold;
+    padding: 15px 20px;
+}
+
+.close-tab-btn:hover {
+    background: linear-gradient(135deg, #5a6268, #495057);
+    box-shadow: 0 4px 8px rgba(108, 117, 125, 0.3);
+}
+
 .button {
     display: inline-block;
     padding: 10px 20px;
@@ -33,6 +98,24 @@ button:hover {
     text-decoration: none;
     border-radius: 5px;
 }
+
 .button:hover {
     background-color: #0056b3;
+}
+
+/* Responsive design */
+@media (max-width: 480px) {
+    .container {
+        margin: 10px;
+        padding: 15px;
+    }
+    
+    .navigation-buttons {
+        flex-direction: column;
+    }
+    
+    button {
+        width: 100%;
+        margin: 5px 0;
+    }
 }

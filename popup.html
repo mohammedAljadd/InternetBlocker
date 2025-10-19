@@ -1,42 +1,93 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>InternetGuard 3</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InternetGuard 3.2</title>
     <link rel="stylesheet" href="popup.css">
 </head>
 <body>
-    <!-- Extension Toggle -->
-    <div class="toggle-container">
-        <span class="toggle-label">Extension Status</span>
-        <div class="toggle-switch" id="extension-toggle">
-            <div class="toggle-slider"></div>
+    <!-- Status Message -->
+    <div id="message" class="message"></div>
+
+    <!-- Header -->
+    <div class="header">
+        <h1>🛡️ InternetGuard 3</h1>
+        <div class="status-badge" id="status-badge">Extension Enabled</div>
+    </div>
+
+    <!-- Content -->
+    <div class="content">
+        <!-- Main Extension Toggle -->
+        <div class="main-toggle">
+            <div class="toggle-info">
+                <h3>Extension Status</h3>
+                <p>Enable or disable all blocking features</p>
+            </div>
+            <div class="toggle-switch" id="main-toggle">
+                <div class="slider"></div>
+            </div>
+        </div>
+
+        <!-- YouTube Shorts Toggle -->
+        <div class="feature-toggle">
+            <div class="feature-row">
+                <div class="feature-info">
+                    <div class="feature-icon shorts-icon">📱</div>
+                    <div class="feature-text">
+                        <h5>Block YouTube Shorts</h5>
+                        <p>Prevent access to distracting short videos</p>
+                    </div>
+                </div>
+                <div class="mini-toggle" id="shorts-toggle">
+                    <div class="mini-slider"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="quick-actions">
+            <button class="quick-action block" id="block-site">
+                <span class="icon">🚫</span>
+                <span>Block This Site</span>
+            </button>
+            <button class="quick-action" id="manage-blocked">
+                <span class="icon">⚙️</span>
+                <span>Manage Blocks</span>
+            </button>
+        </div>
+
+        <!-- Add YouTube Channel -->
+        <div class="input-section">
+            <h4>📺 Block YouTube Channel</h4>
+            <div class="input-group">
+                <input type="text" id="channel-input" placeholder="Enter channel name">
+                <button class="btn-add" id="add-channel">Add</button>
+            </div>
+        </div>
+
+        <!-- Add Adult Site -->
+        <div class="input-section">
+            <h4>🔞 Block Adult Site</h4>
+            <div class="input-group">
+                <input type="text" id="adult-input" placeholder="Enter website URL">
+                <button class="btn-add" id="add-adult">Add</button>
+            </div>
+        </div>
+
+        <!-- Bottom Actions -->
+        <div class="bottom-actions">
+            <button class="btn-secondary" id="export-data">
+                📥 Export Data
+            </button>
+            <button class="btn-secondary" id="import-data">
+                📤 Import Data
+            </button>
         </div>
     </div>
-    
-    <div class="status-indicator" id="status-indicator">
-        Extension is Enabled
-    </div>
 
-    <h3>Block this website</h3>
-    <button id="block-site">Block This Site</button>
-
-    <h3>Block YouTube Channels</h3>
-    <input type="text" id="channel-name" placeholder="Enter channel name">
-    <button id="block-channel">Block This Channel</button>
-
-    <h3>Block Adult Websites</h3>
-    <input type="text" id="adult-site-name" placeholder="Enter adult website URL">
-    <button id="block-adult-site">Block This Adult Site</button>
-
-    <h3>Manage Blocked Websites</h3>
-    <button id="manage-blocked">Manage Blocked Websites</button>
-
-    <button id="save-blocked-data">Save Blocked Data to Text File</button>
-    
-    <button id="load-blocked-data" class="load-blocked-data">Load Blocked Data from Text File</button>
-    <input type="file" id="file-upload" accept=".txt" style="display: none;" />
-
-    <p id="message" style="font-weight: bold;"></p>
+    <!-- Hidden file input -->
+    <input type="file" id="file-upload" accept=".txt,.json" style="display: none;" />
 
     <script src="popup.js"></script>
 </body>
