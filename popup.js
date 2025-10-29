@@ -28,6 +28,20 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 
+    // Facebook Groups Only toggle
+    document.getElementById("facebook-toggle").addEventListener("click", function() {
+        chrome.storage.sync.get({ extensionEnabled: true, facebookGroupsOnly: false }, function(data) {
+            if (!data.extensionEnabled) return;
+            
+            const newState = !data.facebookGroupsOnly;
+            chrome.storage.sync.set({ facebookGroupsOnly: newState }, function() {
+                updateFacebookToggle();
+                showMessage(newState ? "Facebook limited to Groups only!" : "Facebook fully accessible!", 
+                          newState ? "success" : "warning");
+            });
+        });
+    });
+
     // Block current site
     document.getElementById("block-site").addEventListener("click", async function () {
         let [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
@@ -111,6 +125,7 @@ document.addEventListener("DOMContentLoaded", function () {
             blockedChannels: [], 
             pornSites: [],
             shortsBlocked: true,
+            facebookGroupsOnly: false,
             extensionEnabled: true
         }, function (data) {
             const exportData = {
@@ -151,12 +166,14 @@ document.addEventListener("DOMContentLoaded", function () {
                         blockedChannels: data.blockedChannels || [],
                         pornSites: data.pornSites || [],
                         shortsBlocked: data.shortsBlocked !== undefined ? data.shortsBlocked : true,
+                        facebookGroupsOnly: data.facebookGroupsOnly !== undefined ? data.facebookGroupsOnly : false,
                         extensionEnabled: data.extensionEnabled !== undefined ? data.extensionEnabled : true
                     };
                     
                     chrome.storage.sync.set(importData, function() {
                         updateExtensionState();
                         updateShortsToggle();
+                        updateFacebookToggle();
                         showMessage("Data imported successfully!", "success");
                     });
                 } catch (error) {
@@ -169,8 +186,9 @@ document.addEventListener("DOMContentLoaded", function () {
         event.target.value = '';
     });
 
-    // Initialize shorts toggle state
+    // Initialize toggle states
     updateShortsToggle();
+    updateFacebookToggle();
 
     // Enable Enter key for inputs
     document.getElementById("channel-input").addEventListener("keypress", function(e) {
@@ -194,6 +212,7 @@ function updateExtensionState() {
         const inputs = document.querySelectorAll("input[type='text']");
         const buttons = document.querySelectorAll("button:not(#main-toggle)");
         const shortsToggle = document.getElementById("shorts-toggle");
+        const facebookToggle = document.getElementById("facebook-toggle");
         
         // Update main toggle
         if (isEnabled) {
@@ -210,14 +229,16 @@ function updateExtensionState() {
         inputs.forEach(input => input.disabled = !isEnabled);
         buttons.forEach(button => button.disabled = !isEnabled);
         
-        // Update shorts toggle availability
-        if (isEnabled) {
-            shortsToggle.style.opacity = "1";
-            shortsToggle.style.pointerEvents = "auto";
-        } else {
-            shortsToggle.style.opacity = "0.5";
-            shortsToggle.style.pointerEvents = "none";
-        }
+        // Update feature toggles availability
+        [shortsToggle, facebookToggle].forEach(toggle => {
+            if (isEnabled) {
+                toggle.style.opacity = "1";
+                toggle.style.pointerEvents = "auto";
+            } else {
+                toggle.style.opacity = "0.5";
+                toggle.style.pointerEvents = "none";
+            }
+        });
     });
 }
 
@@ -228,6 +249,17 @@ function updateShortsToggle() {
             shortsToggle.classList.add("enabled");
         } else {
             shortsToggle.classList.remove("enabled");
+        }
+    });
+}
+
+function updateFacebookToggle() {
+    chrome.storage.sync.get({ facebookGroupsOnly: false }, function(data) {
+        const facebookToggle = document.getElementById("facebook-toggle");
+        if (data.facebookGroupsOnly) {
+            facebookToggle.classList.add("enabled");
+        } else {
+            facebookToggle.classList.remove("enabled");
         }
     });
 }

@@ -16,7 +16,8 @@ function initializeExtension() {
         blockedChannels: [], 
         pornSites: [],
         extensionEnabled: true,
-        shortsBlocked: true
+        shortsBlocked: true,
+        facebookGroupsOnly: false
     }, (data) => {
         blockedSites = data.blockedSites;
         isExtensionEnabled = data.extensionEnabled;
@@ -69,7 +70,8 @@ function checkAndBlockUrl(url, tabId) {
         blockedChannels: [], 
         pornSites: [],
         extensionEnabled: true,
-        shortsBlocked: true
+        shortsBlocked: true,
+        facebookGroupsOnly: false
     }, (data) => {
         if (!data.extensionEnabled) return;
         
@@ -77,8 +79,20 @@ function checkAndBlockUrl(url, tabId) {
         const blockedYoutubeChannels = data.blockedChannels;
         const pornSites = data.pornSites;
         const shortsBlocked = data.shortsBlocked;
+        const facebookGroupsOnly = data.facebookGroupsOnly;
 
         let shouldBlock = false;
+        
+        // Check Facebook Groups Only feature
+        if (facebookGroupsOnly && url.includes("facebook.com")) {
+            // Allow if URL contains /groups/
+            if (!url.includes("/groups/")) {
+                chrome.tabs.update(tabId, { 
+                    url: chrome.runtime.getURL("/redirect.html?msg=" + encodeURIComponent("Only Facebook Groups are allowed") + "&blocked_url=" + encodeURIComponent(url))
+                });
+                return;
+            }
+        }
         
         if (url.includes("youtube.com")) {
             isYoutubeUrl = true;

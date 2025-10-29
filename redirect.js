@@ -2,6 +2,7 @@
 const urlParams = new URLSearchParams(window.location.search);
 const message = urlParams.get('msg') || "----------";
 const blockedUrl = urlParams.get('blocked_url') || "";
+const safeUrl = urlParams.get('safe_url') || "";
 
 // Display the message
 document.getElementById("message_to_show").textContent = message;
@@ -9,6 +10,12 @@ document.getElementById("message_to_show").textContent = message;
 // Function to go back safely
 function goBackSafely() {
     try {
+        // If we have a safe URL stored, use it
+        if (safeUrl && safeUrl !== 'about:blank') {
+            window.location.replace(safeUrl);
+            return;
+        }
+        
         // For YouTube Shorts specifically, go to YouTube home
         if (blockedUrl.includes('/shorts/')) {
             window.location.replace('https://www.youtube.com/');
@@ -21,20 +28,8 @@ function goBackSafely() {
             return;
         }
         
-        // For other sites, try different approaches
-        if (window.history.length > 2) {
-            // Go back 2 steps to skip the blocked URL
-            window.history.go(-2);
-        } else if (window.history.length > 1) {
-            // Replace current page and go back
-            window.history.replaceState(null, null, window.location.href);
-            setTimeout(() => {
-                window.history.back();
-            }, 100);
-        } else {
-            // No history available, go to a search page
-            window.location.replace('https://www.google.com/');
-        }
+        // For other sites, go to Google
+        window.location.replace('https://www.google.com/');
     } catch (error) {
         // Fallback: go to Google
         window.location.replace('https://www.google.com/');
